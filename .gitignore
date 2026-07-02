@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local env / secrets
+.env
+.env.*
+.venv/
+venv/
+
+# Slurm logs
+*.log
+*.err
+slurm-*.out
+
+# Pipeline outputs
+out*/
+*/out*/
+
+# Runtime temp
+tmp/
+ray/
+.ray/
+
+# Generated data artifacts
+*.parquet
+*.arrow
+*.jsonl
+*.csv
