@@ -1,0 +1,55 @@
+{
+  "rule": "merged unique ids from all rerun_ids TTS-unsuitable lists",
+  "input_files": [
+    "/work/u1007247/agent_stitch_s_pipeline/rerun_ids/tts_unsuitable_ids.csv",
+    "/work/u1007247/agent_stitch_s_pipeline/rerun_ids/tts_unspoken_datetime_money_percent_ids.csv"
+  ],
+  "input_row_counts": {
+    "tts_unsuitable_ids.csv": 13666,
+    "tts_unspoken_datetime_money_percent_ids.csv": 9955
+  },
+  "merged_unique_ids": 23070,
+  "category_row_counts": {
+    "path_filename_or_command": 10329,
+    "money_not_spoken": 7994,
+    "code_fence_or_inline_code": 2641,
+    "too_long_for_direct_tts": 1896,
+    "percent_not_spoken": 1254,
+    "date_not_spoken": 1150,
+    "url_or_email": 893,
+    "time_not_spoken": 246,
+    "html_or_placeholder_token": 33,
+    "formula_or_symbolic": 24,
+    "markdown_or_email_draft": 15,
+    "json_or_raw_dict": 2,
+    "markdown_table": 1
+  },
+  "source_row_counts": {
+    "toolmind": 7032,
+    "nemotron_terminal": 6608,
+    "at_deepseek_v4_pro": 2732,
+    "glaive": 2404,
+    "apigen_mt": 1056,
+    "at_synthtraces": 954,
+    "swe_smith": 661,
+    "hermes_reasoning": 591,
+    "hermes": 568,
+    "swe_zero": 254,
+    "swe_gym": 118,
+    "toolace": 55,
+    "at_qwen37_max_pi": 17,
+    "at_ml_intern": 9,
+    "at_pi_excel": 7,
+    "at_minimax_m3_cc": 4
+  },
+  "source_file_overlap_counts": {
+    "tts_unsuitable_ids.csv": 13115,
+    "tts_unspoken_datetime_money_percent_ids.csv": 9404,
+    "tts_unspoken_datetime_money_percent_ids.csv + tts_unsuitable_ids.csv": 551
+  },
+  "outputs": {
+    "txt": "/work/u1007247/agent_stitch_s_pipeline/rerun_ids/unsuitable.txt",
+    "csv": "/work/u1007247/agent_stitch_s_pipeline/rerun_ids/unsuitable.csv",
+    "summary": "/work/u1007247/agent_stitch_s_pipeline/rerun_ids/unsuitable_summary.json"
+  }
+}
