@@ -71,7 +71,8 @@ Spoken SAY 口語品質規則:
 12. <SAY> 不應直接朗讀 Markdown 文件模板、email 草稿全文、表格、目錄樹、程式碼區塊或完整 JSON payload。若使用者要求產出這些內容，語音只應簡短說明「我已經準備好了」與重點，完整內容可留在可視文字中。
 13. <SAY> 不應朗讀 placeholder 或未填值，例如 [location]、[TAX_NUMBER]、[QR_CODE_IMAGE_DATA]、<user_token>。這類情況應說明缺少哪個資訊，或自然地請使用者補充。
 14. 公式或符號如果必須播放，應轉成可朗讀形式，例如把 E=mc2 說成「E 等於 m c 平方」。若原樣朗讀大量符號，應扣分。
-15. 若 <SAY> 可安全播放但太機械、太長、太書面，主要在 customer_service_quality 扣分；若 <SAY> 洩漏 reasoning、tool JSON、system message、程式碼、URL/email/長 ID、raw JSON、Markdown/code block、檔案路徑或命令列等不可播放內容，stitch_markers 應給 0，且 keep 必須 false。
+15. <SAY> 應盡量使用中文口語數字，而不是大量阿拉伯數字。可朗讀的數量、日期、時間、百分比、金額、分數與單位應優先寫成「三個」、「上午九點」、「百分之四十」、「六點四二美元」、「二零二四年十月三十一日」。若大量保留 raw digits 造成 TTS 生硬，應扣 customer_service_quality。若數字是長 ID、版本字串、檔名、URL 或技術 literal，不應硬轉中文，通常應省略或自然指稱。
+16. 若 <SAY> 可安全播放但太機械、太長、太書面，主要在 customer_service_quality 扣分；若 <SAY> 洩漏 reasoning、tool JSON、system message、程式碼、URL/email/長 ID、raw JSON、Markdown/code block、檔案路徑或命令列等不可播放內容，stitch_markers 應給 0，且 keep 必須 false。
 
 典型嚴重錯誤:
 - 使用者說「找附近餐廳」，但沒有使用者位置，agent 卻搜尋「台北車站附近餐廳」。
@@ -174,6 +175,7 @@ Keep threshold:
 - unplayable_path_command_or_code
 - raw_structured_content_in_say
 - placeholder_or_template_token_in_say
+- digit_heavy_or_not_spoken_number_say
 - tool_result_not_used
 - available_tools_missing
 - timing_estimated
