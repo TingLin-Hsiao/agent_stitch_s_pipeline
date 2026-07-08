@@ -67,7 +67,11 @@ Spoken SAY 口語品質規則:
 8. <SAY> 不應朗讀 URL、email、raw API identifier、長帳號、長訂單編號、交易編號、付款 ID、product_id、item_id 或 confirmation code，除非使用者明確要求確認該識別碼。必要時最多短短提一次，之後應用「這筆訂單」、「您的付款方式」、「剛才提供的 email」等自然說法。
 9. <SAY> 不應使用括號補充、密集標點、斜線串接、分號堆疊，或像「訂單編號為...，接著...，最後...」這種表單、收據、客服單、checklist 口吻。
 10. 如果 final <SAY> 把資訊寫成「細節如下」後接多行或條列式內容，即使沒有 markdown 符號，也應視為過度書面，不適合語音播放。
-11. 若 <SAY> 可安全播放但太機械、太長、太書面，主要在 customer_service_quality 扣分；若 <SAY> 洩漏 reasoning、tool JSON、system message、程式碼、URL/email/長 ID 等不可播放內容，stitch_markers 應給 0，且 keep 必須 false。
+11. <SAY> 不應朗讀檔案路徑、目錄路徑、檔名清單、副檔名、shell 指令、程式碼符號、config key、stack trace、log line、CSV row、raw dict、raw JSON、HTML/XML tag、placeholder token 或 template token。除非使用者明確要求逐字確認，否則應改成「這個設定檔」、「該資料夾」、「剛才那段程式」、「輸出的報告」、「這個欄位」等口語說法。
+12. <SAY> 不應直接朗讀 Markdown 文件模板、email 草稿全文、表格、目錄樹、程式碼區塊或完整 JSON payload。若使用者要求產出這些內容，語音只應簡短說明「我已經準備好了」與重點，完整內容可留在可視文字中。
+13. <SAY> 不應朗讀 placeholder 或未填值，例如 [location]、[TAX_NUMBER]、[QR_CODE_IMAGE_DATA]、<user_token>。這類情況應說明缺少哪個資訊，或自然地請使用者補充。
+14. 公式或符號如果必須播放，應轉成可朗讀形式，例如把 E=mc2 說成「E 等於 m c 平方」。若原樣朗讀大量符號，應扣分。
+15. 若 <SAY> 可安全播放但太機械、太長、太書面，主要在 customer_service_quality 扣分；若 <SAY> 洩漏 reasoning、tool JSON、system message、程式碼、URL/email/長 ID、raw JSON、Markdown/code block、檔案路徑或命令列等不可播放內容，stitch_markers 應給 0，且 keep 必須 false。
 
 典型嚴重錯誤:
 - 使用者說「找附近餐廳」，但沒有使用者位置，agent 卻搜尋「台北車站附近餐廳」。
@@ -113,7 +117,7 @@ Spoken SAY 口語品質規則:
 5. stitch_markers
 2 分: <SAY>、[SOPR]、[EOPR]、[EOR]、<TOOL_CALL>、<TOOL_RESULT> 在出現時都格式正確；reasoning 和 speech 完全分離。
 1 分: 小格式錯、EOR 位置可疑、連續 reasoning 過多、chunk 切分不自然，或某個 tool decision 缺少清楚 partial reasoning。
-0 分: 標記混亂、reasoning/speech 混雜、缺少關鍵標記，或 <SAY> 洩漏 tool JSON、系統訊息、程式碼或內部推理。
+0 分: 標記混亂、reasoning/speech 混雜、缺少關鍵標記，或 <SAY> 洩漏 tool JSON、系統訊息、程式碼、Markdown/code block、raw JSON、檔案路徑、命令列或內部推理。
 
 6. silence_gap
 2 分: max_silence_gap_sec <= 15，且工具 pending 期間有 spoken chunk 覆蓋等待。
@@ -128,8 +132,8 @@ Spoken SAY 口語品質規則:
 
 8. customer_service_quality
 2 分: <SAY> 簡短自然、口語、禮貌且有任務價值；每段像可直接播放的真人語音助理回應。資訊不足、錯誤或空結果時有自然的下一步或追問關鍵資訊。
-1 分: 語言大致可接受，但偏機械、太書面、太冗長、像模板、像 markdown 轉成純文字、不完整，或錯誤/空結果缺少自然下一步。
-0 分: 以真人客服標準看會誤導、敷衍、過度自信、不可播放、像 debug/log/prompt、反覆空泛 filler、像收據或客服單逐項朗讀，或讓使用者以為系統知道其實不知道的事。
+1 分: 語言大致可接受，但偏機械、太書面、太冗長、像模板、像 markdown 轉成純文字、不完整，含少量不必要的檔名/ID/符號，或錯誤/空結果缺少自然下一步。
+0 分: 以真人客服標準看會誤導、敷衍、過度自信、不可播放、像 debug/log/prompt、反覆空泛 filler、像收據或客服單逐項朗讀、朗讀 raw JSON/程式碼/URL/路徑/完整草稿/表格，或讓使用者以為系統知道其實不知道的事。
 
 9. tool_validity
 2 分: tool name 符合 available_tools；若 available_tools 提供完整 schema，arguments 也符合 schema；若只有 name/description，arguments 至少必須是可解析、內部一致且能從 user/context/tool_result grounding 出來。沒有 hallucinated tool、無意義重複呼叫或 stuck loop。
@@ -144,7 +148,7 @@ Hard-fail 條件:
 3. temporal_causality 得 0 分。
 4. grounding 得 0 分。
 5. tool_validity 得 0 分。
-6. <SAY> 洩漏內部 reasoning、tool JSON、system message、程式碼或不可播放內容。
+6. <SAY> 洩漏內部 reasoning、tool JSON、system message、程式碼、raw JSON、Markdown/code block、URL/email、長 ID、檔案路徑、命令列、placeholder token 或其他不可播放內容。
 7. agent 明確發明具體 entity，並基於該 entity 下結論。
 8. agent 在對應 tool_result 前講出 tool result。
 9. tool call 無法解析，或 tool result 無法 match 到前面的 tool call。
@@ -167,6 +171,9 @@ Keep threshold:
 - non_spoken_or_overly_written_say
 - verbose_or_template_like_say
 - unplayable_url_email_or_long_id
+- unplayable_path_command_or_code
+- raw_structured_content_in_say
+- placeholder_or_template_token_in_say
 - tool_result_not_used
 - available_tools_missing
 - timing_estimated

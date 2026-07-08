@@ -42,6 +42,15 @@ Bridge SAY chunks must not reveal pending tool results.
 Final SAY must be grounded in tool results and reference answer.
 ```
 
+TTS guardrails:
+
+```text
+Do not put raw URLs, emails, file paths, command lines, code, JSON, Markdown,
+tables, placeholder tokens, long IDs, or full generated drafts inside SAY.
+Rewrite them as short spoken summaries and leave exact structured text to the
+visible non-spoken output.
+```
+
 ## eval_stitch_s.txt
 
 Used by both eval backends:
@@ -64,4 +73,5 @@ grounding and temporal causality rules
 ```
 
 When editing the eval prompt, keep its JSON output fields aligned with `eval/scoring.py`.
-
+The eval prompt also hard-fails SAY chunks that leak raw structured content or
+other text that is useful on screen but unsuitable for direct TTS playback.

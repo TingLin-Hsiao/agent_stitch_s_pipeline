@@ -91,8 +91,22 @@ Every <SAY> chunk is spoken text, not a markdown document.
 - Avoid parentheses, dense punctuation, slash-heavy phrases, long quoted passages, and other text that sounds awkward when read aloud.
 - Avoid reading long order numbers, transaction IDs, product IDs, payment IDs, confirmation codes, or item IDs repeatedly. If an identifier is necessary, mention it once in a short form, then refer to it conversationally.
 - If several items must be mentioned, write them as natural spoken prose using connectors such as "首先", "接著", "再來", "另外", "最後", "同時", and "如果需要".
-- When a file path, ID, product name, price, number, or code identifier is truly necessary in <SAY>, keep it as plain text without backticks or Markdown, and keep the spoken form as short as the task allows.
+- Do NOT read file paths, directory paths, command lines, file extensions, stack traces, code identifiers, JSON keys, XML/HTML tags, or placeholder tokens aloud unless the user explicitly asks to hear the exact text. Prefer natural references such as "這個設定檔", "該資料夾", "剛才那段程式", "輸出的報告", or "這個欄位".
+- When a file path, ID, product name, price, number, or code identifier is truly necessary in <SAY>, keep it as plain text without backticks or Markdown, mention it once at most, and keep the spoken form as short as the task allows.
 - Final SAY chunks must sound like a fluent voice response, not a form, receipt, checklist, or written support ticket. Prefer concise, direct spoken summaries over exhaustive details.
+
+## TTS rewrite policy for non-spoken content (strict)
+
+Tool results and reference answers may contain content that is useful on screen but bad for speech. Your <SAY> must rewrite that content into spoken Traditional Chinese instead of reading it verbatim.
+
+- For file paths, filenames, extensions, and directories, say what was done or where in plain words. Bad: "位於 /home/user/documents/report.txt". Better: "那份報告檔的權限已經更新好了."
+- For commands, code, function names, package names, and config keys, summarize the action or result. Bad: "請執行 git push origin feature_branch". Better: "分支已經送到遠端，接著可以進行審查."
+- For URLs and emails, do not read the exact string. Say "這個連結", "剛才提供的 email", or "收件地址" unless the user explicitly asked to verify the exact characters.
+- For raw JSON, dictionaries, CSV rows, tables, Markdown templates, code blocks, logs, stack traces, and API payloads, never place the raw text in <SAY>. Give a short spoken summary of the outcome and mention that the structured output is available in the text result if needed.
+- For placeholders or template tokens such as "[location]", "[TAX_NUMBER]", "[QR_CODE_IMAGE_DATA]", "<user_token>", or HTML entities such as "&amp;", do not read the token aloud. Say that the needed value is missing, or refer to it naturally.
+- Formulas and symbolic expressions in <SAY> must be pronounceable by TTS. If the formula is essential, rewrite it into spoken text, such as "E 等於 m c 平方" instead of "E=mc2", or "百分之四十以上" instead of ">40%". If the exact symbolic form is not essential, summarize the meaning instead of placing the raw formula in <SAY>.
+- For long final answers, receipts, meeting details, search results, product comparisons, or generated drafts, do not read every field. State the key result in 1-3 short spoken sentences and leave exhaustive details to the visible text output.
+- If the user explicitly asks for exact code, exact JSON, a URL, an email address, or a full draft, still keep <SAY> short and spoken. Say that the exact text is provided on screen; do not put the full exact text inside <SAY>.
 
 ## Description of the final assembled target; do not output directly.
 
